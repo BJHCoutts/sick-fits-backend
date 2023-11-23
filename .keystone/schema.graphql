@@ -151,6 +151,7 @@ type Product {
   id: ID!
   name: String
   description: String
+  status: String
 }
 
 input ProductWhereInput {
@@ -196,6 +197,24 @@ input ProductWhereInput {
   description_not_ends_with_i: String
   description_in: [String]
   description_not_in: [String]
+  status: String
+  status_not: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
+  status_i: String
+  status_not_i: String
+  status_contains_i: String
+  status_not_contains_i: String
+  status_starts_with_i: String
+  status_not_starts_with_i: String
+  status_ends_with_i: String
+  status_not_ends_with_i: String
+  status_in: [String]
+  status_not_in: [String]
 }
 
 input ProductWhereUniqueInput {
@@ -209,11 +228,14 @@ enum SortProductsBy {
   name_DESC
   description_ASC
   description_DESC
+  status_ASC
+  status_DESC
 }
 
 input ProductUpdateInput {
   name: String
   description: String
+  status: String
 }
 
 input ProductsUpdateInput {
@@ -224,10 +246,128 @@ input ProductsUpdateInput {
 input ProductCreateInput {
   name: String
   description: String
+  status: String
 }
 
 input ProductsCreateInput {
   data: ProductCreateInput
+}
+
+type CloudinaryImage_File {
+  id: ID
+  path: String
+  filename: String
+  originalFilename: String
+  mimetype: String
+  encoding: String
+  publicUrl: String
+  publicUrlTransformed(transformation: CloudinaryImageFormat): String
+}
+
+"""
+Mirrors the formatting options [Cloudinary provides](https://cloudinary.com/documentation/image_transformation_reference).
+All options are strings as they ultimately end up in a URL.
+"""
+input CloudinaryImageFormat {
+  """ Rewrites the filename to be this pretty string. Do not include `/` or `.` 
+  """
+  prettyName: String
+  width: String
+  height: String
+  crop: String
+  aspect_ratio: String
+  gravity: String
+  zoom: String
+  x: String
+  y: String
+  format: String
+  fetch_format: String
+  quality: String
+  radius: String
+  angle: String
+  effect: String
+  opacity: String
+  border: String
+  background: String
+  overlay: String
+  underlay: String
+  default_image: String
+  delay: String
+  color: String
+  color_space: String
+  dpr: String
+  page: String
+  density: String
+  flags: String
+  transformation: String
+}
+
+""" A keystone list """
+type ProductImage {
+  id: ID!
+  image: CloudinaryImage_File
+  altText: String
+}
+
+input ProductImageWhereInput {
+  AND: [ProductImageWhereInput]
+  OR: [ProductImageWhereInput]
+  id: ID
+  id_not: ID
+  id_in: [ID]
+  id_not_in: [ID]
+  image: String
+  image_not: String
+  image_in: [String]
+  image_not_in: [String]
+  altText: String
+  altText_not: String
+  altText_contains: String
+  altText_not_contains: String
+  altText_starts_with: String
+  altText_not_starts_with: String
+  altText_ends_with: String
+  altText_not_ends_with: String
+  altText_i: String
+  altText_not_i: String
+  altText_contains_i: String
+  altText_not_contains_i: String
+  altText_starts_with_i: String
+  altText_not_starts_with_i: String
+  altText_ends_with_i: String
+  altText_not_ends_with_i: String
+  altText_in: [String]
+  altText_not_in: [String]
+}
+
+input ProductImageWhereUniqueInput {
+  id: ID!
+}
+
+enum SortProductImagesBy {
+  id_ASC
+  id_DESC
+  altText_ASC
+  altText_DESC
+}
+
+input ProductImageUpdateInput {
+  image: Upload
+  altText: String
+}
+
+input ProductImagesUpdateInput {
+  id: ID!
+  data: ProductImageUpdateInput
+}
+
+input ProductImageCreateInput {
+  image: Upload
+  altText: String
+}
+
+input ProductImagesCreateInput {
+  data: ProductImageCreateInput
 }
 
 """
@@ -436,6 +576,19 @@ type Query {
   """ Retrieve the meta-data for the Product list. """
   _ProductsMeta: _ListMeta
 
+  """ Search for all ProductImage items which match the where clause. """
+  allProductImages(where: ProductImageWhereInput, search: String, sortBy: [SortProductImagesBy!], orderBy: String, first: Int, skip: Int): [ProductImage]
+
+  """ Search for the ProductImage item with the matching ID. """
+  ProductImage(where: ProductImageWhereUniqueInput!): ProductImage
+
+  """ Perform a meta-query on all ProductImage items which match the where clause. 
+  """
+  _allProductImagesMeta(where: ProductImageWhereInput, search: String, sortBy: [SortProductImagesBy!], orderBy: String, first: Int, skip: Int): _QueryMeta
+
+  """ Retrieve the meta-data for the ProductImage list. """
+  _ProductImagesMeta: _ListMeta
+
   """ Retrieve the meta-data for all lists. """
   _ksListsMeta(where: _ksListsMetaInput): [_ListMeta]
 
@@ -481,6 +634,24 @@ type Mutation {
 
   """ Delete multiple Product items by ID. """
   deleteProducts(ids: [ID!]): [Product]
+
+  """ Create a single ProductImage item. """
+  createProductImage(data: ProductImageCreateInput): ProductImage
+
+  """ Create multiple ProductImage items. """
+  createProductImages(data: [ProductImagesCreateInput]): [ProductImage]
+
+  """ Update a single ProductImage item by ID. """
+  updateProductImage(id: ID!, data: ProductImageUpdateInput): ProductImage
+
+  """ Update multiple ProductImage items by ID. """
+  updateProductImages(data: [ProductImagesUpdateInput]): [ProductImage]
+
+  """ Delete a single ProductImage item by ID. """
+  deleteProductImage(id: ID!): ProductImage
+
+  """ Delete multiple ProductImage items by ID. """
+  deleteProductImages(ids: [ID!]): [ProductImage]
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult!
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
   endSession: Boolean!
