@@ -1,6 +1,7 @@
 import { config, createSchema } from '@keystone-next/keystone/schema'
 import 'dotenv/config'
 import { User } from './schemas/User'
+import { Product } from './schemas/Product'
 import { createAuth } from '@keystone-next/auth'
 import { withItemData, statelessSessions} from '@keystone-next/keystone/session'
 
@@ -33,7 +34,8 @@ export default withAuth(
 			url: databaseURL
 		},
 		lists: createSchema( {
-			User
+			User,
+			Product
 		} ),
 		ui: {
 			isAccessAllowed: ({ session }) => {
@@ -41,7 +43,7 @@ export default withAuth(
 				return !!session?.data
 	}	},
 		session: withItemData( statelessSessions( sessionConfig ), {
-			User: 'id'
+			User: 'id',
 		})
 	})
 )
