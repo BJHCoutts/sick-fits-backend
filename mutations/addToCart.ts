@@ -7,5 +7,32 @@ export default async function addToCart (
 	context: KeystoneContext
 ): Promise<CartItemCreateInput>
 {
-	console.log('adding to cart')
+	const session = context.session
+
+	if (!session.itemId) {
+		throw new Error('You must be logged in to do this!')
+	}
+
+	const allCartItems = await context.lists.CartItem.findMany({
+		where: { user: { id: session.itemId }, product: { id: productId } },
+		resolveFields: 'id,quantity'
+	})
+
+	const [ existingCartItem ] = allCartItems
+	if (existingCartItem) {
+		console.log( `There are already ${ existingCartItem.quantity }, increment by 1!` )
+		
+		return await context.lists.CartItem.updateOne({
+			id: existingCartItem.id,
+			data: { quantity: existingCartItem.quantity + 1 }
+		})
+	}
+
+	return await context.lists.CartItem.createOne({
+		data: {
+			product: { connect: { id: productId } },
+			user: { connect: { id: session.itemId } },
+		}
+		
+	})
 }
