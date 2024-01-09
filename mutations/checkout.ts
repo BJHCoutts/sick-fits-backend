@@ -11,8 +11,9 @@ export default async function checkout (
 ): Promise<OrderCreateInput>
 {
 	const userId = context.session.itemId
-	if (!userId) {
-		throw new Error('Sorry! You must be signed in to create an order')
+	if ( !userId )
+	{
+		throw new Error( 'Sorry! You must be signed in to create an order' )
 	}
 
 	const user = await context.lists.User.findOne( {
@@ -40,14 +41,13 @@ export default async function checkout (
 			}
 		`
 	} )
-	console.dir( user, { depth: null } )
 	
 	const cartItems = user.cart.filter( cartItem => cartItem.product )
 	
-	const amount = cartItems.reduce( ( tally: number, cartItem:CartItemCreateInput) => {
+	const amount = cartItems.reduce( ( tally: number, cartItem: CartItemCreateInput ) =>
+	{
 		return tally + cartItem.quantity * cartItem.product.price
 	}, 0 )
-	console.log( { amount } )
 	
 	const charge = await stripeConfig.paymentIntents.create( {
 		amount,
@@ -57,6 +57,6 @@ export default async function checkout (
 	} ).catch( error =>
 	{
 		console.error( error )
-		throw new Error(error.message)
-	})
+		throw new Error( error.message )
+	} )
 }

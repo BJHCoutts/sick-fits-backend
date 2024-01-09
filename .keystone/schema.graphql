@@ -1143,6 +1143,7 @@ type Mutation {
   sendUserPasswordResetLink(email: String!): SendUserPasswordResetLinkResult
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
   addToCart(productId: ID): CartItem
+  checkout(token: String!): Order
   endSession: Boolean!
 }
 
