@@ -34,7 +34,6 @@ const { withAuth } = createAuth({
   passwordResetLink: {
     async sendToken (args)
     {
-      console.log( args )
       await sendPasswordResetEmail(args.token, args.identity)
     }
   }
@@ -73,7 +72,6 @@ export default withAuth(
     ui: {
       // Show the UI only for people who pass this test
       isAccessAllowed: ({ session }) =>
-        // console.log(session);
         !!session?.data,
     },
     session: withItemData(statelessSessions(sessionConfig), {
