@@ -36,7 +36,6 @@ export async function sendPasswordResetEmail ( resetToken: string, to: string )
 			<a href="${process.env.FRONTEND_URL}/reset?token=${resetToken}">Click Here to Reset!</a>
 		`)
 	} )
-	console.log( info )
 	if ( process.env.MAIL_USER.includes( 'ethereal.email' ) )
 	{
 		console.log(`📧 Message Sent! Preview at ${getTestMessageUrl(info)}`)
