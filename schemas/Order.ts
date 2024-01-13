@@ -7,8 +7,8 @@ export const Order = list({
   access: {
     create: isSignedIn,
     read: rules.canOrder,
-    update: false,
-    delete: false,
+    update: () => false,
+    delete: () => false,
   },
   fields: {
     label: virtual( {
