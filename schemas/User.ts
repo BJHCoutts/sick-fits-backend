@@ -22,7 +22,10 @@ export const User = list({
     } ),
     role: relationship( {
       ref: 'Role.assignedTo',
+    } ),
+    products: relationship( {
+      ref: 'Product.user',
+      many: true,
     })
-    // TODO, add roles
   },
 });
